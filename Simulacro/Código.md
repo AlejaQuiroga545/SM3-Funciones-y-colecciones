@@ -1,3 +1,4 @@
+```python
 # GESTIÓN DE INVENTARIO CON FUNCIONES Y COLECCIONES
 
 # 1. Añadir productos
@@ -154,3 +155,4 @@ def menu():
             print("Por favor, ingresa un número del 1 al 6.")
 
 menu()  # Llama a la función menú para iniciar el programa
+```
