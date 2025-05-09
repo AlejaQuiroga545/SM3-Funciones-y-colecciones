@@ -13,7 +13,7 @@ GESTIÓN DE INVENTARIO CON FUNCIONES Y COLECCIONES
 # Creamos nuestro diccionario (vacío) para almacenar nuestros productos
 inventario = {}
 
-1. Añadir productos
+# 1. Añadir productos
 
 def añadir_producto(inventario): 
 
@@ -42,8 +42,9 @@ def añadir_producto(inventario):
             print("\nPor favor, ingresa un número válido.")
 
 
-    inventario[nombre] = {'Precio_str': precio_str, 'Precio': precio, 'Cantidad': cantidad} # Agregamos el producto al diccionario
+    inventario[nombre] = (precio_str, precio, cantidad) # Agregamos el producto al diccionario
     print(f"\nTu producto '{nombre}' ha sido agregado correctamente. 🥳")
+
 
 ```
 
@@ -54,16 +55,19 @@ def añadir_producto(inventario):
 〰️ Si el producto no está en el inventario, se debe notificar adecuadamente.
 
 ```python
-2. Consultar productos
+# 2. Consultar productos
 
 def buscar_productos(inventario, nombre): 
     if nombre in inventario: # Verificamos si el producto existe en el inventario
         producto = inventario[nombre] # Busca en el diccionario de inventario el nombre, y los valores asociado a él, los guarda en la variable
-        precio_str = producto['Precio_str'] # Busca en el diccionario de producto el valor asociado a 'Precio_str' y lo guarda en la variable
-        cantidad = producto['Cantidad'] # Busca en el diccionario de producto, el valor asociado a la 'Cantidad' y lo guarda en la variable
-        print(f"➡️  Producto: {nombre}")
-        print(f"➡️  Precio: {precio_str}") # Mostramos la cadena de texto original
-        print(f"➡️  Cantidad: {cantidad}")
+        
+        for n_consulta, (string, numeros, cant) in inventario.items():
+            if n_consulta == nombre:
+                precio_str = string # Busca en el diccionario de producto el valor asociado a 'Precio_str' y lo guarda en la variable
+                cantidad = cant # Busca en el diccionario de producto, el valor asociado a la 'Cantidad' y lo guarda en la variable
+        print(f"➡️  Producto: {string}")
+        print(f"➡️  Precio: {numeros}") # Mostramos la cadena de texto original
+        print(f"➡️  Cantidad: {cant}")
     else:
         print(f"\nOops, el producto '{nombre}' no está en tu inventario. 🫢")
 ```
@@ -73,7 +77,7 @@ def buscar_productos(inventario, nombre):
 〰️ El programa debe permitir al usuario seleccionar un producto e introducir un nuevo precio, asegurando que este se actualice correctamente en el inventario.
 
 ```python
-3. Actualizar precios
+# 3. Actualizar precios
 
 def actualizar_precio(inventario, nombre): 
 
@@ -105,7 +109,7 @@ def actualizar_precio(inventario, nombre):
 〰️ El programa debe permitir al usuario eliminar productos del inventario de manera segura
 
 ```python
-4. Eliminar productos
+# 4. Eliminar productos
 
 def eliminar_producto(inventario, nombre): 
 
@@ -131,7 +135,8 @@ def valor_total(inventario):
     print(f"\n✳️   El valor total de tu inventario es $ {total:,.2f}")
 ```
 
-# ✅ Creamos el menú
+# ✅ Creamos nuestro menú
+
 ```python
 def menu():
     print("\n¡Hola coder, bienvenido a tu Gestión de inventario! 🚀. ¿Qué deseas hacer?")
