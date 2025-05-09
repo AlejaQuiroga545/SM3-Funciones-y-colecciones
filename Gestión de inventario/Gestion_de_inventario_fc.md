@@ -10,14 +10,14 @@
 ```python
 GESTIÓN DE INVENTARIO CON FUNCIONES Y COLECCIONES
 
-# Creamos nuestro diccionario (vacío) para almacenar nuestros productos
+#  Creamos nuestro diccionario (vacío) para almacenar nuestros productos
 inventario = {}
 
 # 1. Añadir productos
 
-def añadir_producto(inventario): 
+def añadir_producto(inventario):
 
-    nombre = input("Nombre del producto: ").lower() 
+    nombre = input("Nombre del producto: ").lower()
 
     while True: # Creamos un bucle para asegurar un precio válido
         precio_str = input("Precio: ")
@@ -57,17 +57,15 @@ def añadir_producto(inventario):
 ```python
 # 2. Consultar productos
 
-def buscar_productos(inventario, nombre): 
+def buscar_productos(inventario, nombre):
     if nombre in inventario: # Verificamos si el producto existe en el inventario
         producto = inventario[nombre] # Busca en el diccionario de inventario el nombre, y los valores asociado a él, los guarda en la variable
-        
-        for n_consulta, (string, numeros, cant) in inventario.items():
-            if n_consulta == nombre:
-                precio_str = string # Busca en el diccionario de producto el valor asociado a 'Precio_str' y lo guarda en la variable
-                cantidad = cant # Busca en el diccionario de producto, el valor asociado a la 'Cantidad' y lo guarda en la variable
-        print(f"➡️  Producto: {string}")
-        print(f"➡️  Precio: {numeros}") # Mostramos la cadena de texto original
-        print(f"➡️  Cantidad: {cant}")
+
+        precio_str, precio, cantidad = producto # Desempaquetamos la tupla directamente
+
+        print(f"➡️  Producto: {nombre.capitalize()}") # Usamos el nombre original consultado
+        print(f"➡️  Precio: {precio_str}")
+        print(f"➡️  Cantidad: {cantidad}")
     else:
         print(f"\nOops, el producto '{nombre}' no está en tu inventario. 🫢")
 ```
@@ -79,13 +77,14 @@ def buscar_productos(inventario, nombre):
 ```python
 # 3. Actualizar precios
 
-def actualizar_precio(inventario, nombre): 
+def actualizar_precio(inventario, nombre):
 
     if nombre not in inventario: # Verificamos si el producto existe
         print("Este producto no está en tu inventario 🫢... Intenta nuevamente")
         return
 
-    precio_anterior_str = inventario[nombre]['Precio_str'] # Recuperamos el precio anterior del producto del inventario, y lo guarda en la variable
+    precio_anterior_str, precio_anterior, cantidad_anterior = inventario[nombre] # Desempaquetamos la tupla
+
     print(f"⏪ Precio anterior de '{nombre}': {precio_anterior_str}")
 
     while True: # Creamos un bucle para asegurar un nuevo precio válido
@@ -99,8 +98,7 @@ def actualizar_precio(inventario, nombre):
         except ValueError:
             print("\nPor favor, ingresa un número válido para el precio.")
 
-    inventario[nombre]['Precio_str'] = nuevo_precio_str # Actualizamos el precio (string)
-    inventario[nombre]['Precio'] = nuevo_precio       # Actualizamos el precio (float)
+    inventario[nombre] = (nuevo_precio_str, nuevo_precio, cantidad_anterior) # Actualizamos la tupla completa
     print(f"\n✳️  El precio de '{nombre}' ha sido actualizado a $ {nuevo_precio_str}.")
 ```
 
@@ -111,7 +109,7 @@ def actualizar_precio(inventario, nombre):
 ```python
 # 4. Eliminar productos
 
-def eliminar_producto(inventario, nombre): 
+def eliminar_producto(inventario, nombre):
 
     if nombre in inventario: # Verificamos si el producto existe
         del inventario[nombre] # Eliminamos el producto del diccionario
@@ -130,8 +128,8 @@ def eliminar_producto(inventario, nombre):
 5. Calcular el valor total de los productos del inventario
 
 def valor_total(inventario):
-    calcular_valor = lambda producto: producto['Precio'] * producto['Cantidad'] # Tomamos la información de un producto y nos devuelve el valor de esete (precio por cantidad).
-    total = sum(calcular_valor(producto) for producto in inventario.values()) # Para cada producto, calcula su valor individual (precio por cantidad) utilizando nuestra función calcular_valor
+    calcular_valor = lambda producto: producto[1] * producto[2] # Tomamos la información de un producto (la tupla) y devolvemos el precio (índice 1) multiplicado por la cantidad (índice 2).
+    total = sum(calcular_valor(producto) for producto in inventario.values()) # Para cada tupla de producto, calcula su valor individual y luego suma todos los valores.
     print(f"\n✳️   El valor total de tu inventario es $ {total:,.2f}")
 ```
 
@@ -171,7 +169,7 @@ def menu():
 
             print("\nProductos disponibles:\n")
             for nombre in inventario:
-                print(f"\n✅ {nombre}")
+                print(f"\n✅ {nombre.capitalize()}") # Mostramos los nombres con la primera letra en mayúscula
             nombre_consultar = input("\nNombre del producto que quieres consultar 🔎 ").lower().strip()
             buscar_productos(inventario, nombre_consultar)
 
@@ -183,7 +181,7 @@ def menu():
             print("\nProductos disponibles:\n")
 
             for nombre in inventario:
-                print(f"✅ {nombre}")
+                print(f"✅ {nombre.capitalize()}") # Mostramos los nombres con la primera letra en mayúscula
             nombre_actualizar = input("\nNombre del producto a actualizar 📌: \n").lower()
             actualizar_precio(inventario, nombre_actualizar)
 
@@ -195,7 +193,7 @@ def menu():
             print("\n📍 Productos disponibles:\n")
 
             for nombre in inventario:
-                print(f"✅ {nombre}")
+                print(f"✅ {nombre.capitalize()}") # Mostramos los nombres con la primera letra en mayúscula
             nombre_eliminar = input("\n🗑️   Nombre del producto a eliminar: ").lower()
             eliminar_producto(inventario, nombre_eliminar)
 
